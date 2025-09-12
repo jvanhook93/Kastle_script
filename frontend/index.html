@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KastleApp</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    #drop-area {
+      width: 80%; height: 200px; border: 3px dashed #888;
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; margin: 20px auto; font-size: 16px;
+      color: #555; user-select: none;
+    }
+    #drop-area.hover { border-color: #00aaff; background-color: #f0faff; }
+    input { margin-top: 10px; padding: 5px; width: 300px; font-size: 14px; }
+    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Kastle Excel Processor</h1>
+  <div id="drop-area">Drop Excel/CSV files here</div>
+  <input type="text" id="output-name" placeholder="Output filename (optional)">
+  <br>
+  <button id="submit-btn">Submit</button>
+  <script src="renderer.js"></script>
+</body>
+</html>
