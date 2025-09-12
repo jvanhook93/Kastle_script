@@ -32,9 +32,9 @@ def process_files():
         filename = f.filename.lower()
         try:
             if filename.endswith(".csv"):
-                df = pd.read_csv(f, header=0)
+                df = pd.read_csv(f, header=0, engine="openpyxl")
             else:
-                df = pd.read_excel(f, header=0)
+                df = pd.read_excel(f, header=0, engine="openpyxl")
         except Exception as e:
             print(f"Skipped {f.filename}, cannot read file: {e}")
             skipped_files.append(f.filename)
