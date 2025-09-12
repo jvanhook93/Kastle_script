@@ -14,12 +14,10 @@ function createWindow() {
     },
   });
 
-  // Load the frontend HTML file
   win.loadFile(path.join(__dirname, "frontend", "index.html"));
 }
 
 app.whenReady().then(() => {
-  // Start Flask backend
   const backendPath = path.join(__dirname, "backend", "app.py");
   flaskProcess = spawn("python", [backendPath], { shell: true });
 
@@ -34,7 +32,6 @@ app.whenReady().then(() => {
   createWindow();
 });
 
-// Kill Flask when Electron quits
 app.on("window-all-closed", () => {
   if (flaskProcess) flaskProcess.kill();
   if (process.platform !== "darwin") app.quit();

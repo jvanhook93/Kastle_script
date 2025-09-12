@@ -46,13 +46,10 @@ def process_files():
             continue
 
         try:
-            # Employee name from first row, column B (index 1)
             employee_name = df.iloc[0, 1] if pd.notna(df.iloc[0, 1]) else "Unknown"
 
-            # Number of days in office = number of rows minus header
             days_in_office = len(df)
 
-            # Parse entry (Column D, index 3) and exit (Column G, index 6) times
             entry_times = pd.to_datetime(
                 df.iloc[:, 3].astype(str).str.replace(" CT", "", regex=False).str.strip(),
                 errors="coerce"
@@ -62,7 +59,6 @@ def process_files():
                 errors="coerce"
             )
 
-            # Calculate total seconds
             total_seconds = 0
             for entry, exit_ in zip(entry_times, exit_times):
                 if pd.notna(entry) and pd.notna(exit_):
@@ -73,12 +69,10 @@ def process_files():
                 total_time_str = "N/A"
                 avg_time_str = "N/A"
             else:
-                # Total time in HH:MM
                 total_hours, remainder = divmod(total_seconds, 3600)
                 total_minutes, _ = divmod(remainder, 60)
                 total_time_str = f"{total_hours:02d}:{total_minutes:02d}"
 
-                # Average per day
                 avg_seconds = total_seconds / days_in_office
                 avg_hours, remainder = divmod(int(avg_seconds), 3600)
                 avg_minutes, _ = divmod(remainder, 60)

@@ -5,7 +5,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let droppedFiles = [];
 
-  // --- Drag & drop setup ---
   window.addEventListener("dragover", (e) => e.preventDefault());
   window.addEventListener("drop", (e) => e.preventDefault());
 
@@ -25,7 +24,6 @@ window.addEventListener("DOMContentLoaded", () => {
     dropArea.innerText = `${droppedFiles.length} file(s) ready to process`;
   });
 
-  // --- Submit button ---
   submitBtn.addEventListener("click", async () => {
     if (droppedFiles.length === 0) return alert("Please drag at least one file!");
     const outputName = outputNameInput.value || "Merged_Kastle_Reports_WithSummary.xlsx";
@@ -42,7 +40,6 @@ window.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("http://127.0.0.1:5000/process", { method: "POST", body: formData });
 
       if (!res.ok) {
-        // Clone the response so we can read it safely
         const resClone = res.clone();
         let errMsg;
         try {
@@ -78,7 +75,6 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // --- Ping backend safely ---
   let pingAttempts = 0;
   const maxPingAttempts = 5;
 
