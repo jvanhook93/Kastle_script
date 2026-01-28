@@ -1,26 +1,66 @@
 {
-  "name": "kastleapp",
-  "version": "1.0.0",
+  "name": "inet-report-software",
+  "productName": "Inet Report Software",
+  "version": "1.1.4",
+  "description": "Report Processing Software",
+  "author": "James Van Hook",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jvanhook93/Kastle_script.git"
+  },
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "dist": "electron-builder",
+    "publish:win": "electron-builder --win --publish always"
   },
   "devDependencies": {
-    "@electron/packager": "^18.4.4",
-    "electron": "^25.0.0",
+    "electron": "^25.9.8",
     "electron-builder": "^26.0.12"
   },
-
-  "build": {
-  "appId": "com.yourname.kastle",
-  "productName": "KastleApp",
-  "directories": {
-    "output": "dist"
+  "dependencies": {
+    "electron-updater": "^6.3.0"
   },
-  "win": {
-    "target": "nsis"
+  "build": {
+    "appId": "com.integranet.inetreportsoftware",
+    "productName": "Inet Report Software",
+    "artifactName": "${productName}-Setup-${version}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "frontend/**/*",
+      "assets/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/dist/kastle_backend.exe",
+        "to": "backend/kastle_backend.exe"
+      },
+      {
+        "from": "assets/icon.ico",
+        "to": "assets/icon.ico"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Inet Report Software"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "jvanhook93",
+        "repo": "Kastle_script"
+      }
+    ]
   }
-}
-
 }
