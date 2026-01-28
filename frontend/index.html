@@ -1,27 +1,382 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>KastleApp</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="assets/icon.ico" sizes="any">
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+
+  <title>Inet Report Software</title>
+
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-    #drop-area {
-      width: 80%; height: 200px; border: 3px dashed #888;
-      border-radius: 10px; display: flex; align-items: center;
-      justify-content: center; margin: 20px auto; font-size: 16px;
-      color: #555; user-select: none;
+    :root{
+      --brand:#0F4C81;
+      --brand-dark:#0B3B63;
+      --bg:#F4F8FC;
+      --card:#FFFFFF;
+      --text:#0F172A;
+      --muted:#475569;
+      --border:#D7E2EE;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
     }
-    #drop-area.hover { border-color: #00aaff; background-color: #f0faff; }
-    input { margin-top: 10px; padding: 5px; width: 300px; font-size: 14px; }
-    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 26px 18px 40px; }
+
+    /* Header */
+    .header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+      gap: 14px;
+    }
+    .brand-left {
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+    .title-wrap {
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      min-width:0;
+    }
+    .app-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: 0.2px;
+      color: var(--brand-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill {
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(15, 76, 129, 0.08);
+      border: 1px solid rgba(15, 76, 129, 0.25);
+      color: var(--brand-dark);
+      user-select: none;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Status pill states (spinner + ok/bad) */
+    #status-pill.spin::after {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid rgba(15, 76, 129, 0.25);
+      border-top-color: rgba(15, 76, 129, 0.95);
+      animation: spin 0.8s linear infinite;
+    }
+    #status-pill.ok {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.35);
+      color: #14532d;
+    }
+    #status-pill.bad {
+      background: rgba(239, 68, 68, 0.10);
+      border-color: rgba(239, 68, 68, 0.30);
+      color: #7f1d1d;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Screens */
+    .screen { margin-top: 18px; }
+    .hidden { display: none; }
+
+    /* Home */
+    h1 { margin: 18px 0 6px; font-size: 34px; color: var(--brand-dark); }
+    p { margin: 0 0 18px; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+    .card h2 { margin: 0 0 8px; font-size: 18px; color: var(--text); }
+    .card .desc { color: var(--muted); line-height: 1.4; margin-bottom: 14px; font-size: 13px; }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 14px;
+      font-size: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--brand);
+      background: var(--brand);
+      color: white;
+      cursor: pointer;
+      transition: transform 120ms ease, background 120ms ease, border 120ms ease;
+    }
+    .btn:hover { background: var(--brand-dark); border-color: var(--brand-dark); transform: translateY(-1px); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform:none; }
+
+    .btn.secondary {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+    .btn.secondary:hover { background: #F8FAFC; border-color: #C9D7E6; }
+
+    /* Runner */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+    .tag {
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(15, 76, 129, 0.08);
+      border: 1px solid rgba(15, 76, 129, 0.25);
+      color: var(--brand-dark);
+      user-select:none;
+      white-space: nowrap;
+    }
+
+    #drop-area {
+      width: 100%;
+      height: 220px;
+      border: 2px dashed rgba(15, 76, 129, 0.45);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 14px auto;
+      font-size: 15px;
+      color: var(--muted);
+      user-select: none;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F7FBFF 100%);
+      box-shadow: var(--shadow);
+    }
+    #drop-area.hover {
+      border-color: var(--brand);
+      background: linear-gradient(180deg, #FFFFFF 0%, rgba(15, 76, 129, 0.08) 100%);
+      color: var(--brand-dark);
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="file"] {
+      padding: 10px;
+      width: min(560px, 92vw);
+      font-size: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+    .hint { margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 780px){
+      .grid { grid-template-columns: 1fr; }
+      .app-title { max-width: 260px; }
+    }
+
+    /* In-page splash overlay (optional) */
+    #splash {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #F4F8FC 0%, #EAF2FB 100%);
+      z-index: 9999;
+    }
+    #splash.show { display: flex; }
+    .splash-card {
+      width: min(520px, 92vw);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      text-align: center;
+    }
+    .splash-logo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+    .splash-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 6px;
+    }
+    .splash-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .splash-msg {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .splash-loading {
+      display: inline-flex;
+      gap: 8px;
+      margin: 6px 0 0;
+    }
+    .splash-loading .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(15, 76, 129, 0.35);
+      animation: bounce 1.1s infinite ease-in-out;
+    }
+    .splash-loading .dot:nth-child(2) { animation-delay: .15s; }
+    .splash-loading .dot:nth-child(3) { animation-delay: .30s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .55; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
   </style>
 </head>
+
 <body>
-  <h1>Kastle Excel Processor</h1>
-  <div id="drop-area">Drop Excel/CSV files here</div>
-  <input type="text" id="output-name" placeholder="Output filename (optional)">
-  <br>
-  <button id="submit-btn">Submit</button>
+  <!-- Optional in-page splash -->
+  <div id="splash" class="show">
+    <div class="splash-card">
+      <img class="splash-logo" src="assets/integra_logo_blue.png" alt="IntegraNet" />
+      <div class="splash-title">Inet Report Software</div>
+      <div class="splash-sub">Starting services…</div>
+      <div class="splash-loading" aria-hidden="true">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <div class="splash-msg" id="splash-msg">Launching backend…</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="header">
+      <div class="brand-left">
+        <img class="logo" src="assets/integra_logo_blue.png" alt="IntegraNet Logo" />
+        <div class="title-wrap">
+          <h2 class="app-title">Inet Report Software</h2>
+          <div class="subtitle">Kastle report processing • Attendance + Suite Sessions</div>
+        </div>
+      </div>
+      <div class="pill spin" id="status-pill">Backend: checking…</div>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div id="screen-home" class="screen">
+      <h1>Choose a report</h1>
+      <p>Select the report you want to run and then upload your file(s).</p>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Attendance Report</h2>
+          <div class="desc">
+            Summarizes time-in-office per employee and includes combined raw rows.
+          </div>
+          <button class="btn" id="btn-attendance">Run Attendance Report</button>
+        </div>
+
+        <div class="card">
+          <h2>Suite Sessions (Custom)</h2>
+          <div class="desc">
+            Pairs ENTRY/EXIT badge events, calculates duration in suite, and flags issues (double exit, missing exit, etc).
+          </div>
+          <button class="btn" id="btn-quick">Run Suite Sessions Report</button>
+        </div>
+      </div>
+
+      <div class="hint">Tip: You can drag-and-drop multiple files at once.</div>
+    </div>
+
+    <!-- RUNNER SCREEN -->
+    <div id="screen-runner" class="screen hidden">
+      <div class="topbar">
+        <button class="btn secondary" id="btn-back">← Back</button>
+        <div class="tag" id="runner-title">Report</div>
+      </div>
+
+      <div id="drop-area">Drop Excel/CSV files here</div>
+
+      <div class="row">
+        <input type="file" id="file-input" multiple accept=".csv,.xlsx,.xls" />
+      </div>
+
+      <div class="row">
+        <input type="text" id="output-name" placeholder="Output filename (optional)" />
+      </div>
+
+      <div class="row">
+        <button class="btn" id="submit-btn">Generate Report</button>
+      </div>
+
+      <div class="hint" id="runner-hint"></div>
+    </div>
+  </div>
+
+  <!-- Crash overlays so we NEVER get a silent white page -->
+  <script>
+    window.addEventListener("error", (e) => {
+      const div = document.createElement("div");
+      div.style.cssText = "position:fixed;inset:0;background:#fff;padding:20px;font-family:monospace;white-space:pre-wrap;z-index:10000;color:#b00020;";
+      div.textContent = "JS ERROR:\n" + (e.message || e.error || e);
+      document.body.appendChild(div);
+    });
+
+    window.addEventListener("unhandledrejection", (e) => {
+      const div = document.createElement("div");
+      div.style.cssText = "position:fixed;inset:0;background:#fff;padding:20px;font-family:monospace;white-space:pre-wrap;z-index:10000;color:#b00020;";
+      div.textContent = "PROMISE REJECTION:\n" + (e.reason?.message || e.reason || e);
+      document.body.appendChild(div);
+    });
+  </script>
+
   <script src="renderer.js"></script>
 </body>
 </html>

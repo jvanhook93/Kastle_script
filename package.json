@@ -1,7 +1,7 @@
 {
   "name": "inet-report-software",
   "productName": "Inet Report Software",
-  "version": "1.1.4",
+  "version": "1.1.3",
   "description": "Report Processing Software",
   "author": "James Van Hook",
   "main": "main.js",

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Inet Report Software</title>
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#ffffff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+    }
+    .card{
+      width: 440px;
+      border: 1px solid #D7E2EE;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      text-align:center;
+    }
+    img{ width:72px; height:72px; object-fit:contain; margin-bottom:10px; }
+    h1{ margin:0; font-size:20px; color:#0B3B63; }
+    p{ margin:8px 0 0; color:#475569; font-size:13px; }
+    .status{ margin-top:14px; font-size:12px; color:#0F4C81; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="assets/integra_logo_blue.png" alt="IntegraNet" />
+    <h1>Inet Report Software</h1>
+    <p>Starting services…</p>
+    <div class="status" id="st">Backend: starting…</div>
+  </div>
+
+  <script>
+    const el = document.getElementById("st");
+    if (window.inet?.onBackendStatus) {
+      window.inet.onBackendStatus((data) => {
+        const s = (data?.status || "checking");
+        const d = data?.detail ? ` (${data.detail})` : "";
+        el.textContent = `Backend: ${s}${d}`;
+      });
+    }
+  </script>
+</body>
+</html>
